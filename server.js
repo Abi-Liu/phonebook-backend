@@ -68,5 +68,30 @@ app.delete('/api/persons/:id', (req, res) =>{
 })
 
 app.post('/api/persons', (req, res) => {
+    const getID = () =>{
+        return Math.ceil(Math.random()*100)
+    }
+    const person = req.body
+    potentialID = getID()
+    if(people.find(x => x.id === potentialID)){
+        return res.status(400).json({
+        error: "ID Taken",
+        });
+    } else {
+        person.id = potentialID
+    }
+    if(people.find(x => x.name.toLowerCase() === person.name.toLowerCase())){
+        return res.status(400).json({
+            error: "name already exists"
+        })
+    }
+    if(person.name && person.number){
+        people = people.concat(person);
+        res.json(person)
+    } else {
+        return res.status(400).json({
+        error: "missing name or number",
+        });
+    }
     
 })
